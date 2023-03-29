@@ -1,2 +1,6 @@
+# Commandbox testing server.json
 =
 server.json
+
+# Ignore default of cfml
+Application.cfc

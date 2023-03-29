@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html x-data="MainApp()" x-init="init()">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +7,7 @@
   <!-- Libraries -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://kit.fontawesome.com/efe143a215.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
 
   <!-- AlpineJS -->
   <script src="//unpkg.com/alpinejs" defer></script>
@@ -26,10 +27,7 @@
                 </h1>
             </div>
             <div>
-                <p class="text-3xl text-center">
-                    March 29, 2023<br>
-                    11:19 am
-                </p>
+                <p class="text-3xl text-center" x-text="time"></p>
             </div>
         </div>
     </div>
@@ -57,92 +55,21 @@
         </div>
 
         <!-- even -->
-        <div class="grid grid-cols-6 bg-gradient-to-r from-blue-500 to-gray-500 p-4">
-            <div>
-                PH 7821
-            </div>
-            <div>
-                <img src="" class="p-2">
-            </div>
-            <div>
-                MANILA
-            </div>
-            <div class="text-center">
-                G6
-            </div>
-            <div>
-                18:15
-            </div>
-            <div>
-                <h3>GATE CLOSED</h3>
-            </div>
-        </div>
 
-        <!-- odd -->
-        <div class="grid grid-cols-6 p-4">
-            <div>
-                SG 1246
-            </div>
-            <div>
+        <template x-for="(flight, ctr) in flights" :index="ctr">
+        <div class="grid grid-cols-6 p-4" 
+            :class="(ctr % 2) ? '' : 'bg-gradient-to-r from-blue-500 to-gray-500'"
+        >
+            <div x-text="flight.flightno"></div>
+            <div x-text="ctr">
                 <img src="" class="p-2">
             </div>
-            <div>
-                SINGAPORE
-            </div>
-            <div class="text-center">
-                G2
-            </div>
-            <div>
-                18:15
-            </div>
-            <div>
-                <h3 class="text-sky-500">CALLING</h3>
-            </div>
+            <div x-text="flight.destination"></div>
+            <div x-text="flight.gate"></div>
+            <div x-text="flight.departtime"></div>
+            <div x-text="flight.remarks"></div>
         </div>
-
-        <!-- odd -->
-        <div class="grid grid-cols-6  bg-gradient-to-r from-blue-500 to-gray-500 p-4">
-            <div>
-                US 5638
-            </div>
-            <div>
-                <img src="" class="p-2">
-            </div>
-            <div>
-                LOS ANGELES
-            </div>
-            <div class="text-center">
-                G2
-            </div>
-            <div>
-                18:23
-            </div>
-            <div>
-                <h3 class="text-sky-500">CALLING</h3>
-            </div>
-        </div>
-
-        <!-- even -->
-        <div class="grid grid-cols-6 p-4">
-            <div>
-                US 3244
-            </div>
-            <div>
-                <img src="" class="p-2">
-            </div>
-            <div>
-                SAN FRANCISCO
-            </div>
-            <div class="text-center">
-                G2
-            </div>
-            <div>
-                18:23
-            </div>
-            <div>
-                <h3 class="text-green-500">OPEN</h3>
-            </div>
-        </div>
+        </template>
 
     </div>
 
@@ -156,5 +83,28 @@
             </div>
         </div>
     </div>
+
+    <script>
+        let MainApp = () => {
+            return {
+                name: '',
+                flights: [],
+                flight: null,
+                time: null,
+                isShown: true,
+                init: function() {
+                    fetch("v1/api.cfm")
+                    .then(response => response.json())
+                    .then((data)=> {
+                        this.flights = data;
+                    })
+
+                    setInterval(() => {
+                        this.time = moment().format('ddd - MMMM d, yyyy h:mm:ss a');
+                    }, 1000);
+                }
+            }
+        }
+    </script>
 </body>
 </html>
