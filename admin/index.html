@@ -1,0 +1,97 @@
+<!doctype html>
+<html x-data="MainApp()" x-init="init()">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Libraries -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/efe143a215.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+
+  <!-- AlpineJS -->
+  <script src="//unpkg.com/alpinejs" defer></script>
+
+  <title>Departure Board</title>
+</head>
+<body>
+
+    <div class="container m-2">
+        <h1>DEPARTURE BOARD</h1>
+        <template x-if="showMessage != ''">
+            <div class="alert alert-info" x-text="showMessage"></div>
+        </template>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>FLIGHTNO</th>
+                    <th>DESTINATION</th>
+                    <th>GATE</th>
+                    <th>TIME</th>
+                    <th>REMARKS</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                <template x-for="(flight, ctr) in flights" :index="ctr">
+                    <tr>
+                        <td x-text="flight.flightno"></td>
+                        <td x-text="flight.destination"></td>
+                        <td x-text="flight.gate"></td>
+                        <td x-text="flight.departtime"></td>
+                        <td x-text="flight.remarks"></td>
+                        <td>
+                            <button @click.prevent="changeStatus({ flight: flight, status: 'OPEN' })" class="btn-sm btn-primary">OPEN</button>
+                            <button @click.prevent="changeStatus({ flight: flight, status: 'CLOSE GATE' })" class="btn-sm btn-success">CLOSE GATE</button>
+                            <button @click.prevent="changeStatus({ flight: flight, status: 'CALLING' })" class="btn-sm btn-warning">CALLING</button>
+                            <button @click.prevent="changeStatus({ flight: flight, status: 'CANCELLED' })" class="btn-sm btn-danger">CANCELLED</button>
+                            <button @click.prevent="changeStatus({ flight: flight, status: '-' })" class="btn-sm btn-outline-primary">NONE</button>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <script>
+        let MainApp = () => {
+            return {
+                name: '',
+                flights: [],
+                flight: null,
+                time: null,
+                isShown: true,
+                showMessage: '',
+                init: function() {
+                    fetch("../v1/api.cfm")
+                    .then(response => response.json())
+                    .then((data)=> {
+                        this.flights = data;
+                    })
+                },
+                changeStatus: function(params) {
+                    debugger
+                    fetch("../v1/api.cfm?action=CHANGE_STATUS", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                        },
+                        body: new URLSearchParams({ 
+                            flightno: params['flight'].flightno, 
+                            status: params['status'] 
+                        })
+                    })
+                    .then(response => response.json())
+                    .then((data)=> {
+                        this.showMessage = "Updated successfully!"
+                        this.init()
+                    })
+                },
+            }
+        }
+    </script>
+</body>
+</html>

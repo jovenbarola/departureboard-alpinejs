@@ -93,16 +93,23 @@
                 time: null,
                 isShown: true,
                 init: function() {
+                    this.fetchData()
+
+                    setInterval(() => {
+                        this.time = moment().format('ddd - MMMM d, yyyy h:mm:ss a');
+                    }, 1000);
+
+                    setInterval(() => {
+                        this.fetchData()
+                    }, 3000)
+                },
+                fetchData: function() {
                     fetch("v1/api.cfm")
                     .then(response => response.json())
                     .then((data)=> {
                         this.flights = data;
                     })
-
-                    setInterval(() => {
-                        this.time = moment().format('ddd - MMMM d, yyyy h:mm:ss a');
-                    }, 1000);
-                }
+                },
             }
         }
     </script>
