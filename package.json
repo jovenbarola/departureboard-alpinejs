@@ -12,6 +12,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "build": "npm install",
     "prod": "node -r dotenv/config index.js",
     "start": "nodemon -r dotenv/config index.js"
   },
