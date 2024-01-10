@@ -101,15 +101,15 @@
                             <td x-text="flight.departtime"></td>
                             <td x-text="flight.remarks"></td>
                             <td>
-                                <button @click.prevent="changeStatus({ flight: flight, status: 'OPEN' })"
+                                <button @click.prevent="changeStatus({ id: flight.id, flight: flight, status: 'OPEN' })"
                                     class="btn-sm btn-primary">OPEN</button>
-                                <button @click.prevent="changeStatus({ flight: flight, status: 'CLOSE GATE' })"
+                                <button @click.prevent="changeStatus({ id: flight.id, flight: flight, status: 'CLOSE GATE' })"
                                     class="btn-sm btn-success">CLOSE GATE</button>
-                                <button @click.prevent="changeStatus({ flight: flight, status: 'CALLING' })"
+                                <button @click.prevent="changeStatus({ id: flight.id, flight: flight, status: 'CALLING' })"
                                     class="btn-sm btn-warning">CALLING</button>
-                                <button @click.prevent="changeStatus({ flight: flight, status: 'CANCELLED' })"
+                                <button @click.prevent="changeStatus({ id: flight.id, flight: flight, status: 'CANCELLED' })"
                                     class="btn-sm btn-danger">CANCELLED</button>
-                                <button @click.prevent="changeStatus({ flight: flight, status: '-' })"
+                                <button @click.prevent="changeStatus({ id: flight.id, flight: flight, status: '-' })"
                                     class="btn-sm btn-outline-primary">NONE</button>
                             </td>
                         </tr>
@@ -137,7 +137,7 @@
                 isShown: true,
                 showMessage: '',
                 init: function () {
-                    fetch("../v1/api.cfm")
+                    fetch("/flights")
                         .then(response => response.json())
                         .then((data) => {
                             this.flights = data;
@@ -145,13 +145,13 @@
                 },
                 changeStatus: function (params) {
                     debugger
-                    fetch("../v1/api.cfm?action=CHANGE_STATUS", {
+                    fetch("/changestatus", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
                         },
                         body: new URLSearchParams({
-                            flightno: params['flight'].flightno,
+                            id: params['id'],
                             status: params['status']
                         })
                     })
