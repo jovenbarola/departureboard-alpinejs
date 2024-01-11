@@ -136,8 +136,11 @@
                 time: null,
                 isShown: true,
                 showMessage: '',
+                config: {
+                    url: "https://worker-flightstatus.jovenb.workers.dev/"
+                },
                 init: function () {
-                    fetch("/flights")
+                    fetch(this.config.url + "/flights")
                         .then(response => response.json())
                         .then((data) => {
                             this.flights = data;
@@ -145,7 +148,7 @@
                 },
                 changeStatus: function (params) {
                     debugger
-                    fetch("/changestatus", {
+                    fetch(this.config.url + "/changestatus", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'

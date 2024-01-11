@@ -90,6 +90,9 @@
                 flight: null,
                 time: null,
                 isShown: true,
+                config: {
+                    url: "https://worker-flightstatus.jovenb.workers.dev/"
+                },
                 init: function() {
                     this.fetchData()
 
@@ -102,7 +105,7 @@
                     }, 3000)
                 },
                 fetchData: function() {
-                    fetch("/flights")
+                    fetch(this.config.url + "/flights")
                     .then(response => response.json())
                     .then((data)=> {
                         this.flights = data;
