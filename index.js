@@ -18,7 +18,7 @@ app.use(morgan('combined'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-app.use(express.static('public'))
+app.use('/', express.static('public'))
 app.use('/admin', express.static('admin'))
 
 app.get('/hello', (req, res) => {
