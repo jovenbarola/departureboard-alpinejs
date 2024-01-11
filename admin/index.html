@@ -137,7 +137,7 @@
                 isShown: true,
                 showMessage: '',
                 config: {
-                    url: "https://worker-flightstatus.jovenb.workers.dev/"
+                    url: "https://worker-flightstatus.jovenb.workers.dev"  // remove trailling "/"
                 },
                 init: function () {
                     fetch(this.config.url + "/flights")
