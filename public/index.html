@@ -110,6 +110,10 @@
                     .then((data)=> {
                         this.flights = data;
                     })
+                    .catch((error) => {
+                        alert(JSON.string(error));
+                        console.log(error);
+                    })
                 },
             }
         }
