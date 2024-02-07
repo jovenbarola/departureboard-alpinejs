@@ -34,6 +34,9 @@
     </div>
 
     <div class="container m-2 text-4xl">
+        <template>
+            <h5 x-text="errormsg"></h5>
+        </template>
         <div class="grid grid-cols-6  p-4">
             <div>
                 <h3>FLIGHT NO</h3>
@@ -90,8 +93,9 @@
                 flight: null,
                 time: null,
                 isShown: true,
+                errormsg: "sample",
                 config: {
-                    url: "https://worker-flightstatus.jovenb.workers.dev"   // remove trailling "/"
+                    url: "https://worker-flightstatus.jovenb.workers.devvv"   // remove trailling "/"
                 },
                 init: function() {
                     this.fetchData()
@@ -105,15 +109,21 @@
                     }, 3000)
                 },
                 fetchData: function() {
-                    fetch(this.config.url + "/flights")
-                    .then(response => response.json())
-                    .then((data)=> {
-                        this.flights = data;
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        alert(error.message + ": Check you database connection it might be paused temporarily due to trial period.");
-                    })
+                    try {
+                        fetch(this.config.url + "/flights")
+                        .then(response => response.json())
+                        .then((data)=> {
+                            this.flights = data;
+                        })
+                        .catch((error) => {
+                            debugger
+                            console.log(error);
+                            this.errormsg = error.message + ": Check you database connection it might be paused temporarily due to trial period.";
+                        })                        
+                    } catch (error) {
+                        this.errormsg = error;
+                    }
+
                 },
             }
         }
