@@ -111,8 +111,8 @@
                         this.flights = data;
                     })
                     .catch((error) => {
-                        alert(JSON.string(error));
                         console.log(error);
+                        alert(JSON.string(error.message));
                     })
                 },
             }
