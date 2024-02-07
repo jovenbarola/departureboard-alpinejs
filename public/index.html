@@ -112,7 +112,7 @@
                     })
                     .catch((error) => {
                         console.log(error);
-                        alert(JSON.string(error.message));
+                        alert(error.message + ": Check you database connection it might be paused temporarily due to trial period.");
                     })
                 },
             }
